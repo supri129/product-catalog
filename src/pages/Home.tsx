@@ -1,5 +1,4 @@
 import { Button } from '@/components/ui/button';
-import { MadeWithDyad } from '@/components/made-with-dyad';
 import { Link } from 'react-router-dom';
 
 const Home = () => {
@@ -20,9 +19,6 @@ const Home = () => {
         <Button asChild size="lg">
           <Link to="/products">Shop Now</Link>
         </Button>
-      </div>
-      <div className="mt-24">
-        <MadeWithDyad />
       </div>
     </div>
   );
