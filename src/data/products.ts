@@ -1,0 +1,68 @@
+import { Product } from "@/types/product";
+
+export const products: Product[] = [
+  {
+    id: "1",
+    name: "Wireless Headphones",
+    price: 99.99,
+    imageUrl: "https://images.unsplash.com/photo-1505740420928-5e560c06d30e?q=80&w=2070&auto=format&fit=crop",
+    description: "High-fidelity sound with noise cancellation.",
+    category: "Electronics",
+  },
+  {
+    id: "2",
+    name: "Smart Watch",
+    price: 199.99,
+    imageUrl: "https://images.unsplash.com/photo-1546868871-7041f2a55e12?q=80&w=1964&auto=format&fit=crop",
+    description: "Track your fitness and stay connected.",
+    category: "Electronics",
+  },
+  {
+    id: "3",
+    name: "Leather Backpack",
+    price: 79.99,
+    imageUrl: "https://images.unsplash.com/photo-1553062407-98eeb68c6a62?q=80&w=1887&auto=format&fit=crop",
+    description: "Stylish and durable for everyday use.",
+    category: "Accessories",
+  },
+  {
+    id: "4",
+    name: "Running Shoes",
+    price: 129.99,
+    imageUrl: "https://images.unsplash.com/photo-1542291026-7eec264c27ff?q=80&w=2070&auto=format&fit=crop",
+    description: "Lightweight and comfortable for your daily run.",
+    category: "Footwear",
+  },
+  {
+    id: "5",
+    name: "Coffee Maker",
+    price: 49.99,
+    imageUrl: "https://images.unsplash.com/photo-1565452344012-752e405d6a15?q=80&w=1887&auto=format&fit=crop",
+    description: "Brew the perfect cup of coffee every morning.",
+    category: "Home Goods",
+  },
+  {
+    id: "6",
+    name: "Desk Lamp",
+    price: 39.99,
+    imageUrl: "https://images.unsplash.com/photo-1507413245164-6160d8298b31?q=80&w=2070&auto=format&fit=crop",
+    description: "Modern LED lamp with adjustable brightness.",
+    category: "Home Goods",
+  },
+  {
+    id: "7",
+    name: "Yoga Mat",
+    price: 29.99,
+    imageUrl: "https://images.unsplash.com/photo-1591291621164-2c6367723315?q=80&w=2071&auto=format&fit=crop",
+    description: "Eco-friendly and non-slip for your yoga practice.",
+    category: "Sports",
+  },
+  {
+    id: "8",
+    name: "Bluetooth Speaker",
+    price: 69.99,
+    imageUrl: "https://images.unsplash.com/photo-1589256469207-8c62154a106e?q=80&w=1964&auto=format&fit=crop",
+    description: "Portable speaker with rich, powerful sound.",
+    category: "Electronics",
+  },
+];
