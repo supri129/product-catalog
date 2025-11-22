@@ -25,7 +25,8 @@ const fetchFavoriteProducts = async (userId: string | undefined): Promise<Produc
   const { data: products, error: productsError } = await supabase
     .from('products')
     .select('*')
-    .in('id', productIds);
+    .in('id', productIds)
+    .eq('is_published', true);
 
   if (productsError) {
     throw new Error(productsError.message);

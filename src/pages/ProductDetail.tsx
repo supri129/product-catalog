@@ -15,10 +15,11 @@ const fetchProduct = async (productId: string | undefined) => {
     .from('products')
     .select('*')
     .eq('id', productId)
+    .eq('is_published', true)
     .single();
   
   if (error) {
-    throw new Error(error.message);
+    throw new Error("Product not found or not available.");
   }
   return data as Product;
 };
@@ -35,10 +36,11 @@ const ProductDetail = () => {
   });
 
   if (isLoading) return <p>Loading product details...</p>;
-  if (error) return <p className="text-destructive">Error loading product: {error.message}</p>;
+  if (error) return <p className="text-destructive">{error.message}</p>;
   if (!product) return <p>Product not found.</p>;
 
   const isFavorited = favoriteProductIds.includes(product.id);
+  const isOutOfStock = product.stock === 0;
 
   const handleImageError = (e: React.SyntheticEvent<HTMLImageElement, Event>) => {
     e.currentTarget.src = '/placeholder.svg';
@@ -60,11 +62,14 @@ const ProductDetail = () => {
         <p className="text-muted-foreground mb-6">{product.description}</p>
         <div className="flex items-center justify-between mb-8">
           <p className="text-4xl font-bold text-primary">${product.price.toFixed(2)}</p>
+          <Badge variant={isOutOfStock ? "destructive" : "default"}>
+            {isOutOfStock ? "Out of Stock" : "In Stock"}
+          </Badge>
         </div>
         <div className="flex items-center gap-4">
-          <Button size="lg" className="flex-1">
+          <Button size="lg" className="flex-1" disabled={isOutOfStock}>
             <ShoppingCart className="w-5 h-5 mr-2" />
-            Add to Cart
+            {isOutOfStock ? "Out of Stock" : "Add to Cart"}
           </Button>
           {session && (
             <Button

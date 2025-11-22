@@ -9,6 +9,7 @@ const searchProducts = async (query: string | null) => {
   const { data, error } = await supabase
     .from('products')
     .select('*')
+    .eq('is_published', true)
     .or(`name.ilike.%${query}%,description.ilike.%${query}%`);
   
   if (error) {

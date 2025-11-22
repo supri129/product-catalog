@@ -1,3 +1,4 @@
+import { useEffect } from "react";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import * as z from "zod";
@@ -28,6 +29,7 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { Switch } from "@/components/ui/switch";
+import { Product } from "@/types/product";
 
 const productSchema = z.object({
   name: z.string().min(3, "Name must be at least 3 characters long"),
@@ -41,45 +43,46 @@ const productSchema = z.object({
 
 export type ProductFormData = z.infer<typeof productSchema>;
 
-interface AddProductDialogProps {
+interface EditProductDialogProps {
   open: boolean;
   onOpenChange: (open: boolean) => void;
   onSubmit: (data: ProductFormData) => void;
   isSubmitting: boolean;
+  product: Product | null;
 }
 
 const categories = ["Fruits", "Clothes", "Electronics", "Video Games"];
 
-export function AddProductDialog({ open, onOpenChange, onSubmit, isSubmitting }: AddProductDialogProps) {
+export function EditProductDialog({ open, onOpenChange, onSubmit, isSubmitting, product }: EditProductDialogProps) {
   const form = useForm<ProductFormData>({
     resolver: zodResolver(productSchema),
-    defaultValues: {
-      name: "",
-      description: "",
-      price: 0,
-      image_url: "",
-      category: "Fruits",
-      stock: 0,
-      is_published: true,
-    },
   });
 
-  const handleFormSubmit = (data: ProductFormData) => {
-    onSubmit(data);
-    form.reset();
-  };
+  useEffect(() => {
+    if (product) {
+      form.reset({
+        name: product.name,
+        description: product.description,
+        price: product.price,
+        image_url: product.image_url,
+        category: product.category as any,
+        stock: product.stock,
+        is_published: product.is_published,
+      });
+    }
+  }, [product, form]);
 
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
       <DialogContent className="sm:max-w-[425px]">
         <DialogHeader>
-          <DialogTitle>Add a New Product</DialogTitle>
+          <DialogTitle>Edit Product</DialogTitle>
           <DialogDescription>
-            Fill in the details below to list a new product in your store.
+            Update the details for your product.
           </DialogDescription>
         </DialogHeader>
         <Form {...form}>
-          <form onSubmit={form.handleSubmit(handleFormSubmit)} className="space-y-4">
+          <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4">
             <FormField
               control={form.control}
               name="name"
@@ -87,7 +90,7 @@ export function AddProductDialog({ open, onOpenChange, onSubmit, isSubmitting }:
                 <FormItem>
                   <FormLabel>Product Name</FormLabel>
                   <FormControl>
-                    <Input placeholder="e.g., Organic Bananas" {...field} />
+                    <Input {...field} />
                   </FormControl>
                   <FormMessage />
                 </FormItem>
@@ -100,7 +103,7 @@ export function AddProductDialog({ open, onOpenChange, onSubmit, isSubmitting }:
                 <FormItem>
                   <FormLabel>Description</FormLabel>
                   <FormControl>
-                    <Textarea placeholder="Describe your product..." {...field} />
+                    <Textarea {...field} />
                   </FormControl>
                   <FormMessage />
                 </FormItem>
@@ -113,20 +116,20 @@ export function AddProductDialog({ open, onOpenChange, onSubmit, isSubmitting }:
                 <FormItem>
                   <FormLabel>Price ($)</FormLabel>
                   <FormControl>
-                    <Input type="number" step="0.01" placeholder="e.g., 2.99" {...field} />
+                    <Input type="number" step="0.01" {...field} />
                   </FormControl>
                   <FormMessage />
                 </FormItem>
               )}
             />
-            <FormField
+             <FormField
               control={form.control}
               name="stock"
               render={({ field }) => (
                 <FormItem>
                   <FormLabel>Stock Quantity</FormLabel>
                   <FormControl>
-                    <Input type="number" step="1" placeholder="e.g., 100" {...field} />
+                    <Input type="number" step="1" {...field} />
                   </FormControl>
                   <FormMessage />
                 </FormItem>
@@ -139,7 +142,7 @@ export function AddProductDialog({ open, onOpenChange, onSubmit, isSubmitting }:
                 <FormItem>
                   <FormLabel>Image URL</FormLabel>
                   <FormControl>
-                    <Input placeholder="https://example.com/image.png" {...field} />
+                    <Input {...field} />
                   </FormControl>
                   <FormMessage />
                 </FormItem>
@@ -192,7 +195,7 @@ export function AddProductDialog({ open, onOpenChange, onSubmit, isSubmitting }:
                 Cancel
               </Button>
               <Button type="submit" disabled={isSubmitting}>
-                {isSubmitting ? "Adding..." : "Add Product"}
+                {isSubmitting ? "Saving..." : "Save Changes"}
               </Button>
             </DialogFooter>
           </form>
