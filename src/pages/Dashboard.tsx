@@ -65,20 +65,13 @@ const Dashboard = () => {
 
   return (
     <div>
-      <header className="flex justify-between items-center mb-12">
-        <div>
-          <h1 className="text-4xl font-extrabold tracking-tight lg:text-5xl">
-            Merchant Dashboard
-          </h1>
-          <p className="mt-4 text-xl text-muted-foreground">
-            Manage your product listings.
-          </p>
-        </div>
+      <div className="flex justify-between items-center mb-8">
+        <h1 className="text-3xl font-bold tracking-tight">Your Products</h1>
         <Button onClick={() => setIsAddDialogOpen(true)}>
           <PlusCircle className="w-4 h-4 mr-2" />
           Add Product
         </Button>
-      </header>
+      </div>
       
       {isLoading && <p>Loading your products...</p>}
       {error && <p className="text-destructive">Error loading products: {error.message}</p>}
