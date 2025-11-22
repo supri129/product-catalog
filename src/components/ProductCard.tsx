@@ -13,7 +13,7 @@ const ProductCard = ({ product }: ProductCardProps) => {
       <CardHeader className="p-0">
         <div className="aspect-square overflow-hidden">
           <img
-            src={product.imageUrl}
+            src={product.image_url}
             alt={product.name}
             className="object-cover w-full h-full"
           />
