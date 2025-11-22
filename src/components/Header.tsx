@@ -1,16 +1,15 @@
 import { Link, useNavigate } from 'react-router-dom';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
-import { Search, ShoppingBag, LayoutDashboard, Heart } from 'lucide-react';
+import { Search, ShoppingBag, LayoutDashboard, User } from 'lucide-react';
 import { useAuth } from '@/contexts/AuthContext';
-import { useFavorites } from '@/hooks/useFavorites';
-import { useWishlist } from '@/contexts/WishlistContext';
+import { useSidebar } from '@/contexts/SidebarContext';
 import { showError, showSuccess } from '@/utils/toast';
+import React from 'react';
 
 const Header = () => {
   const { session, supabase, profile } = useAuth();
-  const { favoriteProductIds } = useFavorites();
-  const { openWishlist } = useWishlist();
+  const { openSidebar } = useSidebar();
   const navigate = useNavigate();
   const isMerchant = profile?.role === 'merchant';
 
@@ -21,6 +20,15 @@ const Header = () => {
     } else {
       showSuccess('You have been signed out.');
       navigate('/');
+    }
+  };
+
+  const handleSearch = (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+    const formData = new FormData(e.currentTarget);
+    const searchQuery = formData.get('search') as string;
+    if (searchQuery.trim()) {
+      navigate(`/search?q=${encodeURIComponent(searchQuery.trim())}`);
     }
   };
 
@@ -44,10 +52,10 @@ const Header = () => {
             </nav>
           </div>
           <div className="flex items-center space-x-4">
-            <div className="relative hidden sm:block">
+            <form onSubmit={handleSearch} className="relative hidden sm:block">
               <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
-              <Input placeholder="Search products..." className="pl-10 w-40 lg:w-64" />
-            </div>
+              <Input name="search" placeholder="Search products..." className="pl-10 w-40 lg:w-64" />
+            </form>
             {session ? (
               <div className="flex items-center space-x-2">
                 {isMerchant ? (
@@ -57,13 +65,8 @@ const Header = () => {
                     </Link>
                   </Button>
                 ) : (
-                  <Button variant="ghost" size="icon" className="relative" onClick={openWishlist}>
-                    <Heart className="h-5 w-5" />
-                    {favoriteProductIds.length > 0 && (
-                      <span className="absolute -top-1 -right-1 bg-primary text-primary-foreground text-xs rounded-full h-4 w-4 flex items-center justify-center">
-                        {favoriteProductIds.length}
-                      </span>
-                    )}
+                  <Button variant="ghost" size="icon" className="relative" onClick={openSidebar}>
+                    <User className="h-5 w-5" />
                   </Button>
                 )}
                 <Button onClick={handleSignOut}>Sign Out</Button>
