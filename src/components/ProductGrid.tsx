@@ -1,7 +1,12 @@
 import { products } from "@/data/products";
 import ProductCard from "./ProductCard";
+import { Role } from "@/types/roles";
 
-const ProductGrid = () => {
+interface ProductGridProps {
+  role: Role;
+}
+
+const ProductGrid = ({ role }: ProductGridProps) => {
   return (
     <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-8">
       {products.map((product, index) => (
@@ -10,7 +15,7 @@ const ProductGrid = () => {
           className="animate-fade-in-up opacity-0"
           style={{ animationDelay: `${index * 100}ms`, animationFillMode: 'forwards' }}
         >
-          <ProductCard product={product} />
+          <ProductCard product={product} role={role} />
         </div>
       ))}
     </div>

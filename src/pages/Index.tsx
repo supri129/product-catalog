@@ -1,7 +1,13 @@
+import { useState } from "react";
 import ProductGrid from "@/components/ProductGrid";
 import { MadeWithDyad } from "@/components/made-with-dyad";
+import { ToggleGroup, ToggleGroupItem } from "@/components/ui/toggle-group";
+import { User, Store } from "lucide-react";
+import { Role } from "@/types/roles";
 
 const Index = () => {
+  const [role, setRole] = useState<Role>("visitor");
+
   return (
     <div className="min-h-screen bg-background text-foreground">
       <div className="container mx-auto py-12 px-4 sm:px-6 lg:px-8">
@@ -13,8 +19,30 @@ const Index = () => {
             Discover our new collection. High-quality items curated just for you.
           </p>
         </header>
+
+        <div className="flex justify-center mb-8">
+          <ToggleGroup
+            type="single"
+            value={role}
+            onValueChange={(value: Role) => {
+              if (value) setRole(value);
+            }}
+            className="animate-fade-in-up opacity-0"
+            style={{ animationDelay: '400ms', animationFillMode: 'forwards' }}
+          >
+            <ToggleGroupItem value="visitor" aria-label="Toggle visitor view">
+              <User className="h-4 w-4 mr-2" />
+              Visitor View
+            </ToggleGroupItem>
+            <ToggleGroupItem value="merchant" aria-label="Toggle merchant view">
+              <Store className="h-4 w-4 mr-2" />
+              Merchant View
+            </ToggleGroupItem>
+          </ToggleGroup>
+        </div>
+
         <main>
-          <ProductGrid />
+          <ProductGrid role={role} />
         </main>
       </div>
       <MadeWithDyad />
