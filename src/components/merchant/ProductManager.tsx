@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import React, { useState } from 'react';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { supabase } from '@/integrations/supabase/client';
 import { useAuth } from '@/contexts/AuthContext';
@@ -52,6 +52,10 @@ const ProductManager = ({ products }: ProductManagerProps) => {
     }
   };
 
+  const handleImageError = (e: React.SyntheticEvent<HTMLImageElement, Event>) => {
+    e.currentTarget.src = '/placeholder.svg';
+  };
+
   if (products.length === 0) {
     return <p>You haven't added any products yet.</p>;
   }
@@ -64,9 +68,10 @@ const ProductManager = ({ products }: ProductManagerProps) => {
             <CardHeader className="p-0">
               <div className="aspect-square overflow-hidden">
                 <img
-                  src={product.image_url}
+                  src={product.image_url || '/placeholder.svg'}
                   alt={product.name}
                   className="object-cover w-full h-full"
+                  onError={handleImageError}
                 />
               </div>
             </CardHeader>

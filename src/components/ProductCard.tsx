@@ -1,3 +1,4 @@
+import React from 'react';
 import { Product } from "@/types/product";
 import { Card, CardContent, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
@@ -8,14 +9,19 @@ interface ProductCardProps {
 }
 
 const ProductCard = ({ product }: ProductCardProps) => {
+  const handleImageError = (e: React.SyntheticEvent<HTMLImageElement, Event>) => {
+    e.currentTarget.src = '/placeholder.svg';
+  };
+
   return (
     <Card className="w-full h-full flex flex-col overflow-hidden transition-all duration-300 ease-in-out hover:shadow-xl hover:-translate-y-2">
       <CardHeader className="p-0">
         <div className="aspect-square overflow-hidden">
           <img
-            src={product.image_url}
+            src={product.image_url || '/placeholder.svg'}
             alt={product.name}
             className="object-cover w-full h-full"
+            onError={handleImageError}
           />
         </div>
       </CardHeader>
