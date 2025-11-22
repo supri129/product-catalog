@@ -7,7 +7,6 @@ interface AuthContextType {
   supabase: SupabaseClient;
   session: Session | null;
   profile: Profile | null;
-  loading: boolean;
 }
 
 const AuthContext = createContext<AuthContextType | null>(null);
@@ -18,6 +17,23 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
+    const getSessionAndProfile = async () => {
+      const { data: { session } } = await supabase.auth.getSession();
+      setSession(session);
+
+      if (session) {
+        const { data: profileData } = await supabase
+          .from('profiles')
+          .select('*')
+          .eq('id', session.user.id)
+          .single();
+        setProfile(profileData);
+      }
+      setLoading(false);
+    };
+
+    getSessionAndProfile();
+
     const { data: { subscription } } = supabase.auth.onAuthStateChange(async (_event, session) => {
       setSession(session);
       if (session) {
@@ -30,7 +46,6 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
       } else {
         setProfile(null);
       }
-      setLoading(false);
     });
 
     return () => {
@@ -42,12 +57,11 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
     supabase,
     session,
     profile,
-    loading,
   };
 
   return (
     <AuthContext.Provider value={value}>
-      {children}
+      {!loading && children}
     </AuthContext.Provider>
   );
 };

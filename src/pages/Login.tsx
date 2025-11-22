@@ -3,14 +3,9 @@ import { ThemeSupa } from '@supabase/auth-ui-shared';
 import { useAuth } from '@/contexts/AuthContext';
 import { Navigate } from 'react-router-dom';
 import { ShoppingBag } from 'lucide-react';
-import Spinner from '@/components/Spinner';
 
 const Login = () => {
-  const { session, supabase, loading } = useAuth();
-
-  if (loading) {
-    return <Spinner />;
-  }
+  const { session, supabase } = useAuth();
 
   if (session) {
     return <Navigate to="/" />;

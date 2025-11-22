@@ -1,13 +1,8 @@
 import { useAuth } from '@/contexts/AuthContext';
 import { Navigate, Outlet } from 'react-router-dom';
-import Spinner from './Spinner';
 
 const ProtectedRoute = () => {
-  const { session, loading } = useAuth();
-
-  if (loading) {
-    return <Spinner />;
-  }
+  const { session } = useAuth();
 
   if (!session) {
     return <Navigate to="/login" />;
