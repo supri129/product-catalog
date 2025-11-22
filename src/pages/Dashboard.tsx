@@ -8,7 +8,6 @@ import { PlusCircle } from 'lucide-react';
 import ProductManager from '@/components/merchant/ProductManager';
 import { AddProductDialog, ProductFormData } from '@/components/merchant/AddProductDialog';
 import { showSuccess, showError } from '@/utils/toast';
-import Favorites from './Favorites';
 
 const fetchUserProducts = async (userId: string | undefined) => {
   if (!userId) return [];
@@ -25,14 +24,14 @@ const fetchUserProducts = async (userId: string | undefined) => {
 };
 
 const Dashboard = () => {
-  const { session, profile } = useAuth();
+  const { session } = useAuth();
   const queryClient = useQueryClient();
   const [isAddDialogOpen, setIsAddDialogOpen] = useState(false);
 
   const { data: products, isLoading, error } = useQuery({
     queryKey: ['userProducts', session?.user.id],
     queryFn: () => fetchUserProducts(session?.user.id),
-    enabled: !!session?.user.id && profile?.role === 'merchant',
+    enabled: !!session?.user.id,
   });
 
   const addProductMutation = useMutation({
@@ -64,36 +63,35 @@ const Dashboard = () => {
     addProductMutation.mutate(data);
   };
 
-  if (profile?.role === 'merchant') {
-    return (
-      <div>
-        <div className="flex justify-between items-center mb-8 pb-4 border-b">
-          <div>
-            <h1 className="text-3xl font-bold tracking-tight">Your Products</h1>
-            <p className="text-muted-foreground mt-1">Manage your store's inventory here.</p>
-          </div>
-          <Button onClick={() => setIsAddDialogOpen(true)} size="lg">
-            <PlusCircle className="w-5 h-5 mr-2" />
-            Add Product
-          </Button>
+  return (
+    <div>
+      <header className="flex justify-between items-center mb-12">
+        <div>
+          <h1 className="text-4xl font-extrabold tracking-tight lg:text-5xl">
+            Merchant Dashboard
+          </h1>
+          <p className="mt-4 text-xl text-muted-foreground">
+            Manage your product listings.
+          </p>
         </div>
-        
-        {isLoading && <p>Loading your products...</p>}
-        {error && <p className="text-destructive">Error loading products: {error.message}</p>}
-        {products && <ProductManager products={products} />}
+        <Button onClick={() => setIsAddDialogOpen(true)}>
+          <PlusCircle className="w-4 h-4 mr-2" />
+          Add Product
+        </Button>
+      </header>
+      
+      {isLoading && <p>Loading your products...</p>}
+      {error && <p className="text-destructive">Error loading products: {error.message}</p>}
+      {products && <ProductManager products={products} />}
 
-        <AddProductDialog
-          open={isAddDialogOpen}
-          onOpenChange={setIsAddDialogOpen}
-          onSubmit={handleAddProduct}
-          isSubmitting={addProductMutation.isPending}
-        />
-      </div>
-    );
-  }
-
-  // For visitors, show the favorites/wishlist
-  return <Favorites />;
+      <AddProductDialog
+        open={isAddDialogOpen}
+        onOpenChange={setIsAddDialogOpen}
+        onSubmit={handleAddProduct}
+        isSubmitting={addProductMutation.isPending}
+      />
+    </div>
+  );
 };
 
 export default Dashboard;

@@ -3,7 +3,7 @@ import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { supabase } from '@/integrations/supabase/client';
 import { useAuth } from '@/contexts/AuthContext';
 import { Product } from '@/types/product';
-import { Card, CardContent, CardFooter } from '@/components/ui/card';
+import { Card, CardContent, CardFooter, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Trash2 } from 'lucide-react';
 import { DeleteProductAlert } from './DeleteProductAlert';
@@ -57,45 +57,35 @@ const ProductManager = ({ products }: ProductManagerProps) => {
   };
 
   if (products.length === 0) {
-    return (
-      <div className="text-center py-16 border-2 border-dashed rounded-lg">
-        <h2 className="text-xl font-semibold text-muted-foreground">No products yet!</h2>
-        <p className="mt-2 text-muted-foreground">Click "Add Product" to get started.</p>
-      </div>
-    );
+    return <p>You haven't added any products yet.</p>;
   }
 
   return (
     <>
-      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">
-        {products.map((product, index) => (
-           <div
-            key={product.id}
-            className="animate-fade-in-up opacity-0"
-            style={{ animationDelay: `${index * 100}ms`, animationFillMode: 'forwards' }}
-          >
-            <Card className="w-full h-full flex flex-col overflow-hidden border-none rounded-lg shadow-md">
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-8">
+        {products.map((product) => (
+          <Card key={product.id} className="w-full h-full flex flex-col overflow-hidden">
+            <CardHeader className="p-0">
               <div className="aspect-square overflow-hidden">
                 <img
                   src={product.image_url || '/placeholder.svg'}
                   alt={product.name}
                   className="object-cover w-full h-full"
                   onError={handleImageError}
-                  loading="lazy"
                 />
               </div>
-              <CardContent className="p-4 flex-grow">
-                <h3 className="text-lg font-semibold text-gray-800">{product.name}</h3>
-              </CardContent>
-              <CardFooter className="flex justify-between items-center p-4 pt-0">
-                <p className="text-2xl font-bold text-primary">${product.price.toFixed(2)}</p>
-                <Button size="lg" variant="destructive" onClick={() => handleDeleteClick(product.id)} disabled={deleteProductMutation.isPending && selectedProductId === product.id}>
-                  <Trash2 className="w-5 h-5 mr-2" />
-                  Delete
-                </Button>
-              </CardFooter>
-            </Card>
-          </div>
+            </CardHeader>
+            <CardContent className="p-4 flex-grow">
+              <CardTitle className="text-lg font-semibold">{product.name}</CardTitle>
+            </CardContent>
+            <CardFooter className="flex justify-between items-center p-4 pt-0">
+              <p className="text-xl font-bold text-primary">${product.price.toFixed(2)}</p>
+              <Button size="sm" variant="destructive" onClick={() => handleDeleteClick(product.id)} disabled={deleteProductMutation.isPending && selectedProductId === product.id}>
+                <Trash2 className="w-4 h-4 mr-2" />
+                Delete
+              </Button>
+            </CardFooter>
+          </Card>
         ))}
       </div>
       <DeleteProductAlert

@@ -24,10 +24,10 @@ const App = () => (
         <AuthProvider>
           <Routes>
             <Route path="/login" element={<Login />} />
-            <Route element={<Layout />}>
-              <Route path="/" element={<Home />} />
-              <Route path="/products" element={<Products />} />
-              <Route element={<ProtectedRoute />}>
+            <Route element={<ProtectedRoute />}>
+              <Route element={<Layout />}>
+                <Route path="/" element={<Home />} />
+                <Route path="/products" element={<Products />} />
                 <Route path="/favorites" element={<Favorites />} />
                 <Route path="/dashboard" element={<Dashboard />} />
               </Route>
