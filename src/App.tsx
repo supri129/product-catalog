@@ -9,6 +9,7 @@ import { ThemeProvider } from "@/components/ThemeProvider";
 import Layout from "@/components/Layout";
 import Home from "./pages/Home";
 import Products from "./pages/Products";
+import ProductDetail from "./pages/ProductDetail";
 import Favorites from "./pages/Favorites";
 import Login from "./pages/Login";
 import Dashboard from "./pages/Dashboard";
@@ -33,6 +34,7 @@ const App = () => (
                   <Route element={<Layout />}>
                     <Route path="/" element={<Home />} />
                     <Route path="/products" element={<Products />} />
+                    <Route path="/products/:id" element={<ProductDetail />} />
                     <Route path="/favorites" element={<Favorites />} />
                     <Route path="/dashboard" element={<Dashboard />} />
                     <Route path="/search" element={<Search />} />
