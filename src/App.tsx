@@ -9,6 +9,7 @@ import Home from "./pages/Home";
 import Products from "./pages/Products";
 import Favorites from "./pages/Favorites";
 import Login from "./pages/Login";
+import Dashboard from "./pages/Dashboard";
 import ProtectedRoute from "@/components/ProtectedRoute";
 import NotFound from "./pages/NotFound";
 
@@ -28,6 +29,7 @@ const App = () => (
               <Route path="/login" element={<Login />} />
               <Route element={<ProtectedRoute />}>
                 <Route path="/favorites" element={<Favorites />} />
+                <Route path="/dashboard" element={<Dashboard />} />
               </Route>
               <Route path="*" element={<NotFound />} />
             </Route>

@@ -1,7 +1,7 @@
 import { Link, useNavigate } from 'react-router-dom';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
-import { Search, ShoppingBag, Heart, User } from 'lucide-react';
+import { Search, ShoppingBag, LayoutDashboard } from 'lucide-react';
 import { useAuth } from '@/contexts/AuthContext';
 import { showError, showSuccess } from '@/utils/toast';
 
@@ -40,7 +40,14 @@ const Header = () => {
               <Input placeholder="Search products..." className="pl-10 w-40 lg:w-64" />
             </div>
             {session ? (
-              <Button onClick={handleSignOut}>Sign Out</Button>
+              <div className="flex items-center space-x-2">
+                <Button variant="ghost" size="icon" asChild>
+                  <Link to="/dashboard">
+                    <LayoutDashboard className="h-5 w-5" />
+                  </Link>
+                </Button>
+                <Button onClick={handleSignOut}>Sign Out</Button>
+              </div>
             ) : (
               <Button asChild>
                 <Link to="/login">Sign In</Link>
