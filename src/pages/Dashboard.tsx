@@ -67,10 +67,13 @@ const Dashboard = () => {
   if (profile?.role === 'merchant') {
     return (
       <div>
-        <div className="flex justify-between items-center mb-8">
-          <h1 className="text-3xl font-bold tracking-tight">Your Products</h1>
-          <Button onClick={() => setIsAddDialogOpen(true)}>
-            <PlusCircle className="w-4 h-4 mr-2" />
+        <div className="flex justify-between items-center mb-8 pb-4 border-b">
+          <div>
+            <h1 className="text-3xl font-bold tracking-tight">Your Products</h1>
+            <p className="text-muted-foreground mt-1">Manage your store's inventory here.</p>
+          </div>
+          <Button onClick={() => setIsAddDialogOpen(true)} size="lg">
+            <PlusCircle className="w-5 h-5 mr-2" />
             Add Product
           </Button>
         </div>
