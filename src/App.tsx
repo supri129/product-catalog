@@ -23,16 +23,16 @@ const App = () => (
       <BrowserRouter>
         <AuthProvider>
           <Routes>
-            <Route element={<Layout />}>
-              <Route path="/" element={<Home />} />
-              <Route path="/products" element={<Products />} />
-              <Route path="/login" element={<Login />} />
-              <Route element={<ProtectedRoute />}>
+            <Route path="/login" element={<Login />} />
+            <Route element={<ProtectedRoute />}>
+              <Route element={<Layout />}>
+                <Route path="/" element={<Home />} />
+                <Route path="/products" element={<Products />} />
                 <Route path="/favorites" element={<Favorites />} />
                 <Route path="/dashboard" element={<Dashboard />} />
               </Route>
-              <Route path="*" element={<NotFound />} />
             </Route>
+            <Route path="*" element={<NotFound />} />
           </Routes>
         </AuthProvider>
       </BrowserRouter>
