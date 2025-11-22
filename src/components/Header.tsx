@@ -1,17 +1,13 @@
 import { Link, useNavigate } from 'react-router-dom';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
-import { Search, ShoppingBag, LayoutDashboard, Heart } from 'lucide-react';
+import { Search, ShoppingBag, LayoutDashboard } from 'lucide-react';
 import { useAuth } from '@/contexts/AuthContext';
 import { showError, showSuccess } from '@/utils/toast';
-import { useWishlist } from '@/contexts/WishlistContext';
-import { useFavorites } from '@/hooks/useFavorites';
 
 const Header = () => {
   const { session, supabase } = useAuth();
   const navigate = useNavigate();
-  const { openWishlist } = useWishlist();
-  const { favoriteProductIds } = useFavorites();
 
   const handleSignOut = async () => {
     const { error } = await supabase.auth.signOut();
@@ -45,14 +41,6 @@ const Header = () => {
             </div>
             {session ? (
               <div className="flex items-center space-x-2">
-                <Button variant="ghost" size="icon" onClick={openWishlist} className="relative">
-                  <Heart className="h-5 w-5" />
-                  {favoriteProductIds.length > 0 && (
-                    <span className="absolute -top-1 -right-1 flex h-4 w-4 items-center justify-center rounded-full bg-primary text-xs font-bold text-primary-foreground">
-                      {favoriteProductIds.length}
-                    </span>
-                  )}
-                </Button>
                 <Button variant="ghost" size="icon" asChild>
                   <Link to="/dashboard">
                     <LayoutDashboard className="h-5 w-5" />

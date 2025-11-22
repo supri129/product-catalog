@@ -1,7 +1,6 @@
 import { Outlet } from 'react-router-dom';
 import Header from './Header';
 import Footer from './Footer';
-import { WishlistSidebar } from './wishlist/WishlistSidebar';
 
 const Layout = () => {
   return (
@@ -11,7 +10,6 @@ const Layout = () => {
         <Outlet />
       </main>
       <Footer />
-      <WishlistSidebar />
     </div>
   );
 };
