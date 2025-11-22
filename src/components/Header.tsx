@@ -1,13 +1,18 @@
 import { Link, useNavigate } from 'react-router-dom';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
-import { Search, ShoppingBag, LayoutDashboard } from 'lucide-react';
+import { Search, ShoppingBag, LayoutDashboard, Heart } from 'lucide-react';
 import { useAuth } from '@/contexts/AuthContext';
+import { useFavorites } from '@/hooks/useFavorites';
+import { useWishlist } from '@/contexts/WishlistContext';
 import { showError, showSuccess } from '@/utils/toast';
 
 const Header = () => {
-  const { session, supabase } = useAuth();
+  const { session, supabase, profile } = useAuth();
+  const { favoriteProductIds } = useFavorites();
+  const { openWishlist } = useWishlist();
   const navigate = useNavigate();
+  const isMerchant = profile?.role === 'merchant';
 
   const handleSignOut = async () => {
     const { error } = await supabase.auth.signOut();
@@ -30,8 +35,12 @@ const Header = () => {
             </Link>
             <nav className="hidden md:flex items-center space-x-6">
               <Link to="/" className="text-sm font-medium text-muted-foreground hover:text-primary">Home</Link>
-              <Link to="/products" className="text-sm font-medium text-muted-foreground hover:text-primary">Products</Link>
-              <Link to="/favorites" className="text-sm font-medium text-muted-foreground hover:text-primary">Favorites</Link>
+              {!isMerchant && (
+                <>
+                  <Link to="/products" className="text-sm font-medium text-muted-foreground hover:text-primary">Products</Link>
+                  <Link to="/favorites" className="text-sm font-medium text-muted-foreground hover:text-primary">Favorites</Link>
+                </>
+              )}
             </nav>
           </div>
           <div className="flex items-center space-x-4">
@@ -41,11 +50,22 @@ const Header = () => {
             </div>
             {session ? (
               <div className="flex items-center space-x-2">
-                <Button variant="ghost" size="icon" asChild>
-                  <Link to="/dashboard">
-                    <LayoutDashboard className="h-5 w-5" />
-                  </Link>
-                </Button>
+                {isMerchant ? (
+                  <Button variant="ghost" size="icon" asChild>
+                    <Link to="/dashboard">
+                      <LayoutDashboard className="h-5 w-5" />
+                    </Link>
+                  </Button>
+                ) : (
+                  <Button variant="ghost" size="icon" className="relative" onClick={openWishlist}>
+                    <Heart className="h-5 w-5" />
+                    {favoriteProductIds.length > 0 && (
+                      <span className="absolute -top-1 -right-1 bg-primary text-primary-foreground text-xs rounded-full h-4 w-4 flex items-center justify-center">
+                        {favoriteProductIds.length}
+                      </span>
+                    )}
+                  </Button>
+                )}
                 <Button onClick={handleSignOut}>Sign Out</Button>
               </div>
             ) : (
